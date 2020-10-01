@@ -1,0 +1,50 @@
+เมื่อกำหนดให้ ผลต่างมีการแจกแจงแบบปกติ
+ถ้าให้ Mu_D แทน ผลต่างยอดขายผลิตภัณฑ์ที่วางในระดับสายตาและต่ำกว่าสายตา
+
+1.1 ข้อใดถูกต้องเกี่ยวกับตั้งสมมติฐาน
+ตอบ B) H0: Mu_D = 0 vs H1: Mu_D > 0
+
+1.2 จากข้อมูลผลต่างตัวอย่าง จะเลือกข้อสอบสถิติทดสอบในข้อใด
+ตอบ B) t test สำหรับการทดสอบค่าเฉลี่ยนประชากร 1 กลุ่ม
+
+1.3 จากข้อมูลผลต่างตัวอย่าง จงคำนวณค่า p-value ที่ได้จาก สถติทดสอบในข้อ 1.2 (ทศนิยม 5 ตำแหน่ง)
+ตอบ 0.00042
+
+1.4 ถ้ากำหนดระดับนัยสำคัญเท่ากับ 0.01 จากข้อ 1.1 - 1.3 ความเชื่อของผู้จัดการฝ่่ายการตลาดถูกต้องหรือไม่ เพราะเหตุใด
+ตอบ ความเชื่อของผู้จัดการฝ่ายถูกต้อง เพราะ ค่า p-value มีค่าน้อยกว่าระดับนัยสำคัญ จึงทำให้ต้องปฏิเสธสมมติฐาน H0  และยอมรับสมมติฐาน H1
+
+---------------------------Code----------------------------
+
+from scipy import stats
+import numpy as np
+
+D = np.array([3, 0, 5, 3, 9, 1, 6, 5, 3, 5])
+
+# 1. Set assumption: mu = 0.0 vs H1: mu > 0 (one-tail testing)
+mu0 = 0.0
+tail = 1 # Valid value of tail are -1,1,2
+
+# 2. Set level of significance:
+alpha = 0.01
+
+# 3. Select a statistical test: t-test
+tval, pval = stats.ttest_1samp(D, mu0)
+
+# 4. Draw the conclusion based on p-value.
+pval = pval/2.0 
+if tail == -1.0:
+    print("p-value: %f" % pval)
+    if (pval < alpha and tval < 0) :
+        print(" Reject the null hypothesis (H0)")
+    else:
+        print(" Fail to reject the null hypothesis (H0)")
+else : 
+    print("p-value: %f" % pval)
+    if (pval < alpha and tval > 0) :
+        print(" Reject the null hypothesis (H0)")
+    else:
+        print(" Fail to reject the null hypothesis (H0)")
+
+---------------------------output---------------------------
+p-value: 0.000424
+Reject the null hypothesis (H0)
